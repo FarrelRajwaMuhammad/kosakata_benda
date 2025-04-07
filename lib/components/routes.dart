@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
+import 'package:kosakata_benda/presentasion/pages/kosakata_sekolah_page.dart';
 import 'package:kosakata_benda/presentasion/pages/main_page.dart';
-import 'package:kosakata_benda/presentasion/pages/play_menu_page.dart';
+import 'package:kosakata_benda/presentasion/pages/kosakata_menu_page.dart';
 
 class AppPages {
   static final routes = [
@@ -8,8 +9,7 @@ class AppPages {
       name: '/',
       page: () => MenuPage(),
     ),
-    GetPage(name: '/menu', 
-    page: () => PlayMenuPage()
-    ),
+    GetPage(name: '/menu', page: () => KosakataMenu()),
+    GetPage(name: '/EduVocab', page: () => KosakataSekolah()),
   ];
 }

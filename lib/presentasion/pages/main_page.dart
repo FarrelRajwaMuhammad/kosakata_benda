@@ -101,7 +101,7 @@ class _MenuPageState extends State<MenuPage> {
               children: [
                 ButtonSVG(
                     onPressed: () {
-                      Get.toNamed('/menu');
+                      print("dipencet");
                     },
                     SVGpath: 'assets/images/3.svg',
                     size: 200,
@@ -109,7 +109,7 @@ class _MenuPageState extends State<MenuPage> {
               ],
             ),
           ),
-          //achievement button
+          //KosaKata button
           Positioned(
             left: 170,
             bottom: 10,
@@ -117,7 +117,7 @@ class _MenuPageState extends State<MenuPage> {
               children: [
                 ButtonSVG(
                     onPressed: () {
-                      print("dipencet");
+                      Get.toNamed('/menu');
                     },
                     SVGpath: 'assets/images/1.svg',
                     size: 200,

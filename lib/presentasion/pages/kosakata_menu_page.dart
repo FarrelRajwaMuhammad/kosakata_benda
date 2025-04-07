@@ -1,10 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kosakata_benda/presentasion/widgets/background.dart';
 import 'package:kosakata_benda/presentasion/widgets/button.dart';
 
-class PlayMenuPage extends StatelessWidget {
-  const PlayMenuPage ({super.key});
+class KosakataMenu extends StatelessWidget {
+  const KosakataMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,19 +56,34 @@ class PlayMenuPage extends StatelessWidget {
               SizedBox(height: 50), // Beri jarak
             ],
           ),
-          //play button
-           Positioned(
+          Positioned(
+                left: 10,
+                top: 20,
+                child: Column(
+                  children: [
+                    ButtonSVG(
+                      onPressed: () {
+                        Get.toNamed('/');
+                      },
+                      SVGpath: 'assets/images/Untitled design.svg',
+                      size: 100,
+                    ),
+                  ],
+                ),
+              ),
+          //
+          Positioned(
             right: 170,
             bottom: 10,
             child: Column(
               children: [
                 ButtonSVG(
-                    onPressed: () {
-                      print("dipencet");
-                    },
-                    SVGpath: 'assets/images/5.svg',
-                    size: 200,
-                    ),
+                  onPressed: () {
+                    Get.toNamed('/EduVocab');
+                  },
+                  SVGpath: 'assets/images/5.svg',
+                  size: 200,
+                ),
               ],
             ),
           ),
@@ -78,12 +94,12 @@ class PlayMenuPage extends StatelessWidget {
             child: Column(
               children: [
                 ButtonSVG(
-                    onPressed: () {
-                      print("dipencet");
-                    },
-                    SVGpath: 'assets/images/6.svg',
-                    size: 200,
-                    ),
+                  onPressed: () {
+                    print("dipencet");
+                  },
+                  SVGpath: 'assets/images/6.svg',
+                  size: 200,
+                ),
               ],
             ),
           )
