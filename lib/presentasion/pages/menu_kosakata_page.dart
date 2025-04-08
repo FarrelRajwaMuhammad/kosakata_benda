@@ -53,25 +53,9 @@ class KosakataMenu extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 50), // Beri jarak
+              SizedBox(height: 50),
             ],
           ),
-          Positioned(
-                left: 10,
-                top: 20,
-                child: Column(
-                  children: [
-                    ButtonSVG(
-                      onPressed: () {
-                        Get.toNamed('/');
-                      },
-                      SVGpath: 'assets/images/Untitled design.svg',
-                      size: 100,
-                    ),
-                  ],
-                ),
-              ),
-          //
           Positioned(
             right: 170,
             bottom: 10,
@@ -87,7 +71,6 @@ class KosakataMenu extends StatelessWidget {
               ],
             ),
           ),
-          //achievement button
           Positioned(
             left: 170,
             bottom: 10,
@@ -95,12 +78,22 @@ class KosakataMenu extends StatelessWidget {
               children: [
                 ButtonSVG(
                   onPressed: () {
-                    print("dipencet");
+                    Get.toNamed('/HomeVocab');
                   },
                   SVGpath: 'assets/images/6.svg',
                   size: 200,
                 ),
               ],
+            ),
+          ),
+          Positioned(
+            left: 0,
+            top: 20,
+            child: IconButton(
+              onPressed: () {
+                Get.toNamed('/');
+              },
+              icon: const Icon(Icons.arrow_back_ios),
             ),
           )
         ],

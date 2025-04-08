@@ -6,14 +6,14 @@ import 'package:kosakata_benda/presentasion/widgets/frame.dart';
 
 int currentPage = 0;
 
-class KosakataSekolah extends StatefulWidget {
-  const KosakataSekolah({super.key});
+class HomeVocab extends StatefulWidget {
+  const HomeVocab ({super.key});
 
   @override
-  State<KosakataSekolah> createState() => _KosakataSekolahState();
+  State<HomeVocab> createState() => _HomeVocab();
 }
 
-class _KosakataSekolahState extends State<KosakataSekolah> {
+class _HomeVocab extends State<HomeVocab> {
   final PageController _controller = PageController(viewportFraction: 1);
   int _currentPage = 0;
 
@@ -87,11 +87,11 @@ class _KosakataSekolahState extends State<KosakataSekolah> {
               ),
               const Center(
                 child: Text(
-                  "Di Sekolah",
+                  "Di Rumah",
                   style: TextStyle(
                     fontFamily: "Borsok",
                     fontSize: 30,
-                    color: Color(0xff3d6294),
+                    color: Color(0xffff5757),
                   ),
                 ),
               ),
