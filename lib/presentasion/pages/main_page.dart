@@ -5,6 +5,9 @@ import 'package:get/get.dart';
 import 'package:kosakata_benda/presentasion/widgets/background.dart';
 import 'package:kosakata_benda/core/materials/color_materials.dart';
 import 'package:kosakata_benda/presentasion/widgets/button.dart';
+import 'package:kosakata_benda/presentasion/controllers/audio_controller.dart';
+
+final AudioController audioController = Get.put(AudioController());
 
 class MenuPage extends StatefulWidget {
   @override
@@ -68,12 +71,12 @@ class _MenuPageState extends State<MenuPage> {
             child: Column(
               children: [
                 ButtonSVG(
-                    onPressed: () {
-                      print("dipencet");
-                    },
-                    SVGpath: 'assets/images/2.svg',
-                    size: 100,
-                    ),
+                  onPressed: () {
+                    Get.toNamed('/Option');
+                  },
+                  SVGpath: 'assets/images/2.svg',
+                  size: 100,
+                ),
               ],
             ),
           ),
@@ -81,17 +84,19 @@ class _MenuPageState extends State<MenuPage> {
           Positioned(
             left: 10,
             top: 100,
-            child: Column(
-              children: [
-                ButtonSVG(
-                    onPressed: () {
-                      print("dipencet");
-                    },
-                    SVGpath: 'assets/images/4.svg',
-                    size: 100,
+            child: Obx(() => Column(
+                  children: [
+                    ButtonSVG(
+                      onPressed: () {
+                        audioController.toggleSound();
+                      },
+                      SVGpath: audioController.isPlaying.value
+                          ? 'assets/images/5.svg'
+                          : 'assets/images/4.svg',
+                      size: 100,
                     ),
-              ],
-            ),
+                  ],
+                )),
           ),
           //play button
           Positioned(
@@ -100,12 +105,12 @@ class _MenuPageState extends State<MenuPage> {
             child: Column(
               children: [
                 ButtonSVG(
-                    onPressed: () {
-                      print("dipencet");
-                    },
-                    SVGpath: 'assets/images/3.svg',
-                    size: 200,
-                    ),
+                  onPressed: () {
+                    print("dipencet");
+                  },
+                  SVGpath: 'assets/images/3.svg',
+                  size: 200,
+                ),
               ],
             ),
           ),
@@ -116,12 +121,12 @@ class _MenuPageState extends State<MenuPage> {
             child: Column(
               children: [
                 ButtonSVG(
-                    onPressed: () {
-                      Get.toNamed('/menu');
-                    },
-                    SVGpath: 'assets/images/1.svg',
-                    size: 200,
-                    ),
+                  onPressed: () {
+                    Get.toNamed('/menu');
+                  },
+                  SVGpath: 'assets/images/1.svg',
+                  size: 200,
+                ),
               ],
             ),
           )
