@@ -1,20 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:kosakata_benda/presentasion/widgets/background.dart';
-import 'package:kosakata_benda/core/materials/color_materials.dart';
 import 'package:kosakata_benda/presentasion/widgets/button.dart';
-import 'package:kosakata_benda/presentasion/controllers/audio_controller.dart';
 
-final AudioController audioController = Get.put(AudioController());
+class MainMenu extends StatelessWidget {
+  const MainMenu({super.key});
 
-class MenuPage extends StatefulWidget {
-  @override
-  _MenuPageState createState() => _MenuPageState();
-}
-
-class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +20,7 @@ class _MenuPageState extends State<MenuPage> {
                 padding: EdgeInsets.only(top: 25),
                 child: Center(
                   child: Text(
-                    "Belajar",
+                    "Permainan",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: "Borsok",
@@ -64,72 +55,57 @@ class _MenuPageState extends State<MenuPage> {
               SizedBox(height: 50), // Beri jarak
             ],
           ),
-          //setting button
+          //#Button Tebak Benda
           Positioned(
-            left: 10,
+            left: 130,
+            bottom: 10,
+            child: Column(
+              children: [
+                ButtonSVG(
+                    onPressed: () {
+                      Get.toNamed('/TebakBenda');
+                    },
+                    SVGpath: 'assets/images/53.svg',
+                    size: 220),
+              ],
+            ),
+          ),
+          Positioned(
+            left: 305,
+            bottom: 10,
+            child: Column(
+              children: [
+                ButtonSVG(
+                    onPressed: () {
+                      print("kentot");
+                    },
+                    SVGpath: 'assets/images/54.svg',
+                    size: 220),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 130,
+            bottom: 10,
+            child: Column(
+              children: [
+                ButtonSVG(
+                    onPressed: () {
+                      print("kentot");
+                    },
+                    SVGpath: 'assets/images/55.svg',
+                    size: 220),
+              ],
+            ),
+          ),
+          Positioned(
+            left: 0,
             top: 20,
-            child: Column(
-              children: [
-                ButtonSVG(
-                  onPressed: () {
-                    Get.toNamed('/Option');
-                  },
-                  SVGpath: 'assets/images/2.svg',
-                  size: 100,
-                ),
-              ],
+            child: IconButton(
+              onPressed: () => Get.toNamed('/menu'),
+              icon: const Icon(Icons.arrow_back_ios),
             ),
           ),
-          //sound button
-          Positioned(
-            left: 10,
-            top: 100,
-            child: Obx(() => Column(
-                  children: [
-                    ButtonSVG(
-                      onPressed: () {
-                        audioController.toggleSound();
-                      },
-                      SVGpath: audioController.isPlaying.value
-                          ? 'assets/images/5.svg'
-                          : 'assets/images/4.svg',
-                      size: 100,
-                    ),
-                  ],
-                )),
-          ),
-          //play button
-          Positioned(
-            right: 170,
-            bottom: 10,
-            child: Column(
-              children: [
-                ButtonSVG(
-                  onPressed: () {
-                    Get.toNamed('/MainMenu');
-                  },
-                  SVGpath: 'assets/images/3.svg',
-                  size: 200,
-                ),
-              ],
-            ),
-          ),
-          //KosaKata button
-          Positioned(
-            left: 170,
-            bottom: 10,
-            child: Column(
-              children: [
-                ButtonSVG(
-                  onPressed: () {
-                    Get.toNamed('/menu');
-                  },
-                  SVGpath: 'assets/images/1.svg',
-                  size: 200,
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );

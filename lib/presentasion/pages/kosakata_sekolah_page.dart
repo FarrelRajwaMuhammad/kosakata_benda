@@ -158,8 +158,8 @@ class _KosakataSekolahState extends State<KosakataSekolah> {
                         top: MediaQuery.of(context).size.height * 0.15,
                         child: ButtonSVG(
                           onPressed: () => _goToPage(_currentPage - 1),
-                          SVGpath: 'assets/images/3.svg',
-                          size: 75,
+                          SVGpath: 'assets/images/29.svg',
+                          size: 90,
                         ),
                       ),
                       Positioned(
@@ -167,8 +167,8 @@ class _KosakataSekolahState extends State<KosakataSekolah> {
                         top: MediaQuery.of(context).size.height * 0.15,
                         child: ButtonSVG(
                           onPressed: () => _goToPage(_currentPage + 1),
-                          SVGpath: 'assets/images/3.svg',
-                          size: 75,
+                          SVGpath: 'assets/images/28.svg',
+                          size: 90,
                         ),
                       ),
                     ],
