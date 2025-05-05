@@ -55,6 +55,7 @@ class MainMenu extends StatelessWidget {
               SizedBox(height: 50), // Beri jarak
             ],
           ),
+
           //#Button Tebak Benda
           Positioned(
             left: 130,
@@ -70,6 +71,8 @@ class MainMenu extends StatelessWidget {
               ],
             ),
           ),
+
+          //#Button Pasang Huruf
           Positioned(
             left: 305,
             bottom: 10,
@@ -84,6 +87,8 @@ class MainMenu extends StatelessWidget {
               ],
             ),
           ),
+
+          //#Button Menjodohkan Gambar
           Positioned(
             right: 130,
             bottom: 10,
@@ -102,7 +107,7 @@ class MainMenu extends StatelessWidget {
             left: 0,
             top: 20,
             child: IconButton(
-              onPressed: () => Get.toNamed('/menu'),
+              onPressed: () => Get.toNamed('/skrt'),
               icon: const Icon(Icons.arrow_back_ios),
             ),
           ),

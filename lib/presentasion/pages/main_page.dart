@@ -91,7 +91,7 @@ class _MenuPageState extends State<MenuPage> {
                         audioController.toggleSound();
                       },
                       SVGpath: audioController.isPlaying.value
-                          ? 'assets/images/5.svg'
+                          ? 'assets/images/56.svg'
                           : 'assets/images/4.svg',
                       size: 100,
                     ),

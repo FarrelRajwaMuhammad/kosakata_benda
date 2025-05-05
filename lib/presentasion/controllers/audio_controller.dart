@@ -18,6 +18,7 @@ class AudioController extends GetxController {
 
     try {
       await player.setAsset('assets/audio/KidSong.mp3');
+      player.setLoopMode(LoopMode.one);
     } catch (e) {
       print("Gagal load audio: $e");
     }
