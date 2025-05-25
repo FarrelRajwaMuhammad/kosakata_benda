@@ -14,28 +14,40 @@ class Frame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.25,
-      child: AspectRatio(
-        aspectRatio: 3 / 4,
-        child: Card(
-          shape: isCircle
-              ? const CircleBorder(
-                  side: BorderSide(color: Colors.black, width: 2),
-                )
-              : RoundedRectangleBorder(
+    final double size = MediaQuery.of(context).size.width * 0.25;
+
+    return isCircle
+        ? SizedBox(
+            width: size,
+            height: size,
+            child: Card(
+              shape: const CircleBorder(
+                side: BorderSide(color: Colors.black, width: 2),
+              ),
+              elevation: 4,
+              margin: const EdgeInsets.all(6),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: ClipOval(
+                  child: Image.network(imagepath, fit: BoxFit.cover),
+                ),
+              ),
+            ),
+          )
+        : SizedBox(
+            width: size,
+            child: AspectRatio(
+              aspectRatio: 3 / 4,
+              child: Card(
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                   side: const BorderSide(color: Colors.black, width: 2),
                 ),
-          elevation: 4,
-          margin: const EdgeInsets.all(6),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: isCircle
-                ? ClipOval(
-                    child: Image.network(imagepath, fit: BoxFit.cover),
-                  )
-                : Column(
+                elevation: 4,
+                margin: const EdgeInsets.all(6),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
                     children: [
                       Expanded(
                         flex: 7,
@@ -53,13 +65,13 @@ class Frame extends StatelessWidget {
                             ),
                             textAlign: TextAlign.center,
                           ),
-                        ), 
+                        ),
                       ),
                     ],
                   ),
-          ),
-        ),
-      ),
-    );
+                ),
+              ),
+            ),
+          );
   }
 }

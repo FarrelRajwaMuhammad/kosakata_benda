@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:kosakata_benda/components/routes.dart';
+import 'package:kosakata_benda/presentasion/controllers/vocab_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  Get.put(VocabController());
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
@@ -13,7 +16,6 @@ Future<void> main() async {
     runApp(const MyApp());
   });
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

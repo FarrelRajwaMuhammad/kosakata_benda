@@ -24,15 +24,4 @@ class VocabApi {
       throw Exception('Gagal load vocab');
     }
   }
-
-  // static Future<void> createVocabs(List<Vocab> vocabs) async {
-  //   final res = await http.post(
-  //     Uri.parse('$baseUrl/'),
-  //     headers: {'Content-Type': 'application/json'},
-  //     body: json.encode(vocabs.map((v) => v.toJson()).toList()),
-  //   );
-  //   if (res.statusCode != 201) {
-  //     throw Exception('Gagal membuat vocab');
-  //   }
-  // }
 }

@@ -22,7 +22,7 @@ class Vocab {
     }
 
     return Vocab(
-      id: json['ID'],
+      id: json['id'],
       judul: json['judul'],
       category: json['category'],
       image_url: fullUrl,

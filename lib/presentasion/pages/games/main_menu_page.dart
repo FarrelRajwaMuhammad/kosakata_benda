@@ -80,7 +80,7 @@ class MainMenu extends StatelessWidget {
               children: [
                 ButtonSVG(
                     onPressed: () {
-                      print("kentot");
+                      Get.toNamed("/PasangHuruf");
                     },
                     SVGpath: 'assets/images/54.svg',
                     size: 220),
@@ -96,7 +96,7 @@ class MainMenu extends StatelessWidget {
               children: [
                 ButtonSVG(
                     onPressed: () {
-                      print("kentot");
+                      Get.toNamed("/MatchingPage");
                     },
                     SVGpath: 'assets/images/55.svg',
                     size: 220),
