@@ -68,8 +68,21 @@ class _MatchingPageState extends State<MatchingPage> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Ups!'),
-        content: const Text('Coba lagi, pasangan belum tepat.'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/wrong.png', // path gambar salah
+              width: 150,
+              height: 150,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Coba lagi, pasangan belum tepat.',
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -81,17 +94,25 @@ class _MatchingPageState extends State<MatchingPage> {
   }
 
   void _showCompletionDialog() {
+    final controller = Get.find<VocabController>();
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
         title: const Text('Selesai!'),
-        content: const Text('Kamu telah menjodohkan semua dengan benar!'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Total Benar : ${controller.matchCorrectCount.value}'),
+            Text('Total Salah: ${controller.matchWrongCount.value}'),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () {
-              Get.back(); // Tutup dialog
-              Get.back(); // Kembali ke menu utama
+              Get.back();
+              Get.back();
             },
             child: const Text('Kembali ke Menu'),
           ),
@@ -168,9 +189,17 @@ class _MatchingPageState extends State<MatchingPage> {
                         color: Colors.orange,
                         minHeight: 10,
                       ),
-                      const SizedBox(height: 4),
-                      Text('Soal ${current + 1} dari $total'),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 2),
+                      Center(
+                        child: Text(
+                          'Soal ${current + 1} dari $total',
+                          style: const TextStyle(
+                            fontSize: 16, 
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
                       Expanded(
                         child: Stack(
                           key: _stackKey,
@@ -222,6 +251,8 @@ class _MatchingPageState extends State<MatchingPage> {
   }
 
   Widget _buildImageItem(int i, String imageUrl) {
+    final bool isSelected = _selectedImageIndex == i;
+
     return GestureDetector(
       onTap: () {
         final imageBox =
@@ -239,31 +270,36 @@ class _MatchingPageState extends State<MatchingPage> {
           });
         }
       },
-      child: Container(
-        key: _imageKeys[i],
-        width: 120,
-        height: 120,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: _selectedImageIndex == i ? Colors.orange : Colors.black,
-            width: 2,
+      child: Transform.scale(
+        scale: isSelected ? 1.1 : 1.0, // zoom in saat selected
+        child: Container(
+          key: _imageKeys[i],
+          width: 120,
+          height: 120,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: isSelected ? Colors.orange : Colors.black,
+              width: isSelected ? 4 : 2, // border lebih tebal saat selected
+            ),
+            borderRadius: BorderRadius.circular(16),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: isSelected
+                    ? Colors.orange.withOpacity(0.6) // shadow lebih jelas
+                    : Colors.grey.withOpacity(0.3),
+                blurRadius: isSelected ? 12 : 4,
+                offset: const Offset(2, 2),
+              )
+            ],
           ),
-          borderRadius: BorderRadius.circular(16),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              blurRadius: 4,
-              offset: const Offset(2, 2),
-            )
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(14),
-          child: Image.network(
-            imageUrl,
-            fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(14),
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+            ),
           ),
         ),
       ),
@@ -298,13 +334,19 @@ class _MatchingPageState extends State<MatchingPage> {
               'textIndex': j,
             };
           } else {
+            // SALAH → tambah 1
+            controller.matchWrongCount.value++;
             _showIncorrectDialog();
           }
+
           setState(() {
             _selectedImageIndex = null;
             _currentLineStart = null;
           });
           if (controller.matchedLines.every((m) => m['textIndex'] != null)) {
+            // PAGE BENAR → tambah 1
+            controller.matchCorrectCount.value++;
+
             Future.delayed(const Duration(milliseconds: 500), () {
               controller.currentMatchIndex.value++;
               if (controller.currentMatchIndex.value <
@@ -337,7 +379,7 @@ class _MatchingPageState extends State<MatchingPage> {
           style: const TextStyle(
             fontFamily: "Borsok",
             fontSize: 20,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.normal,
             color: Color(0xff333333),
           ),
         ),
@@ -355,7 +397,7 @@ class _LinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.green
+      ..color = Colors.black
       ..strokeWidth = 3
       ..style = PaintingStyle.stroke;
 

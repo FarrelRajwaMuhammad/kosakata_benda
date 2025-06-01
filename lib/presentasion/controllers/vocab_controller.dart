@@ -1,4 +1,3 @@
-// === FINAL CONTROLLER FIX ===
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kosakata_benda/core/api/vocab_api.dart';
@@ -12,6 +11,8 @@ class VocabController extends GetxController {
   var isLoading = false.obs;
   var currentQuestion = Rx<Vocab?>(null);
   var options = <Vocab>[].obs;
+  var tebakCorrectCount = 0.obs;
+  var tebakWrongCount = 0.obs;
 
   var currentVocab = Rx<Vocab?>(null);
   var shuffledLetters = <String>[].obs;
@@ -20,6 +21,8 @@ class VocabController extends GetxController {
   var currentQuestionIndex = 0.obs;
   var dragGameVocabs = <Vocab>[].obs;
   final Map<String, int> letterFrequency = {};
+  var matchCorrectCount = 0.obs;
+  var matchWrongCount = 0.obs;
 
   var matchGameVocabs = <Vocab>[].obs;
   var currentMatchIndex = 0.obs;
@@ -27,6 +30,7 @@ class VocabController extends GetxController {
   var textOptions = <Vocab>[].obs;
   var matchedLines = <Map<String, int?>>[].obs;
   var totalMatchQuestions = 10;
+  var matchCorrectPages = 0.obs; // per page
 
   @override
   void onInit() {
@@ -67,6 +71,7 @@ class VocabController extends GetxController {
     if (selected.id == null || correct.id == null) return;
     final isCorrect = selected.id == correct.id;
 
+    // Simpan game log
     final game = Game(
       vocabId: correct.id!,
       gameType: 'tebak',
@@ -75,32 +80,108 @@ class VocabController extends GetxController {
       playedAt: DateTime.now(),
     );
 
-    Get.dialog(
-      AlertDialog(
-        title: Text(isCorrect ? "Benar!" : "Salah"),
-        content: Text(isCorrect ? "Jawaban kamu tepat!" : "Coba lagi ya!"),
+    // Update counter
+    if (isCorrect) {
+      tebakCorrectCount.value++;
+    } else {
+      tebakWrongCount.value++;
+    }
+
+    // Cek apakah sudah selesai 10 soal
+    if (currentQuestionIndex.value + 1 >= totalQuestions) {
+      // Modal selesai
+      Get.dialog(AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.celebration, color: Colors.blue, size: 100),
+            const SizedBox(height: 16),
+            const Text(
+              "Kamu telah menyelesaikan semua soal!",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            Text("Total Benar: ${tebakCorrectCount.value}"),
+            Text("Total Salah: ${tebakWrongCount.value}"),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              // Reset game
+              tebakCorrectCount.value = 0;
+              tebakWrongCount.value = 0;
+              currentQuestionIndex.value = 0;
+              generateQuestion();
+              Get.back();
+            },
+            child: const Text("Main Lagi"),
+          ),
+          TextButton(
+            onPressed: () {
+              // Kembali ke menu
+              tebakCorrectCount.value = 0;
+              tebakWrongCount.value = 0;
+              currentQuestionIndex.value = 0;
+              Get.back();
+              Get.back();
+            },
+            child: const Text("Kembali ke Menu"),
+          ),
+        ],
+      ));
+    } else {
+      // Modal jawaban
+      Get.dialog(AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (isCorrect)
+              Icon(Icons.check_circle, color: Colors.green, size: 150)
+            else
+              Image.asset(
+                'assets/images/wrong.png',
+                width: 150,
+                height: 150,
+              ),
+            const SizedBox(height: 16),
+            Text(
+              isCorrect ? "Jawaban kamu tepat!" : "Coba lagi ya!",
+              style: const TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () {
               Get.back();
+              currentQuestionIndex.value++;
               generateQuestion();
             },
             child: const Text("Lanjut"),
           ),
         ],
-      ),
-    );
+      ));
+    }
   }
 
   void prepareDragGame() {
     if (vocabs.isEmpty) return;
 
+    // Filter vocab: tanpa spasi dan tidak panjang (contoh: max 8 karakter)
+    final filteredVocabs = vocabs
+        .where((v) => !v.judul.contains(' ') && v.judul.length <= 8)
+        .toList();
+
+    if (filteredVocabs.isEmpty) return;
+
     if (dragGameVocabs.isEmpty ||
         currentQuestionIndex.value >= totalQuestions) {
-      final availableCount =
-          vocabs.length < totalQuestions ? vocabs.length : totalQuestions;
-      vocabs.shuffle();
-      dragGameVocabs.value = vocabs.take(availableCount).toList();
+      final availableCount = filteredVocabs.length < totalQuestions
+          ? filteredVocabs.length
+          : totalQuestions;
+      filteredVocabs.shuffle();
+      dragGameVocabs.value = filteredVocabs.take(availableCount).toList();
       currentQuestionIndex.value = 0;
     }
 
@@ -157,40 +238,67 @@ class VocabController extends GetxController {
 
   void checkDragAnswer() {
     final correct = isAnswerCorrect();
-    Get.dialog(AlertDialog(
-      title: Text(correct ? "Benar!" : "Salah"),
-      content:
-          Text(correct ? "Kamu menyusun dengan benar!" : "Coba lagi, yuk!"),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Get.back();
-            currentQuestionIndex.value++;
-            if (currentQuestionIndex.value < dragGameVocabs.length) {
-              prepareDragGame();
-            } else {
-              Get.dialog(AlertDialog(
-                title: const Text("Selesai"),
-                content: const Text("Kamu telah menyelesaikan semua soal!"),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      dragGameVocabs.clear();
-                      currentQuestionIndex.value = 0;
-                      currentVocab.value = null;
-                      Get.back();
-                      Get.back();
-                    },
-                    child: const Text("Kembali"),
+
+    Get.dialog(
+      AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (correct)
+              Icon(Icons.check_circle, color: Colors.green, size: 150)
+            else
+              Image.asset(
+                'assets/images/wrong.png', // path gambar salah
+                width: 150,
+                height: 150,
+              ),
+            const SizedBox(height: 16),
+            Text(
+              correct ? "Kamu menyusun dengan benar!" : "Coba lagi, yuk!",
+              style: const TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+              currentQuestionIndex.value++;
+              if (currentQuestionIndex.value < dragGameVocabs.length) {
+                prepareDragGame();
+              } else {
+                Get.dialog(AlertDialog(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.celebration, color: Colors.blue, size: 150),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Kamu telah menyelesaikan semua soal!",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
                   ),
-                ],
-              ));
-            }
-          },
-          child: const Text("Lanjut"),
-        )
-      ],
-    ));
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        dragGameVocabs.clear();
+                        currentQuestionIndex.value = 0;
+                        currentVocab.value = null;
+                        Get.back();
+                        Get.back();
+                      },
+                      child: const Text("Kembali"),
+                    ),
+                  ],
+                ));
+              }
+            },
+            child: const Text("Lanjut"),
+          ),
+        ],
+      ),
+    );
   }
 
   int usedLetterCount(String letter) {
@@ -231,6 +339,8 @@ class VocabController extends GetxController {
     if (matchGameVocabs.isEmpty) {
       vocabs.shuffle();
       matchGameVocabs.value = vocabs.take(totalMatchQuestions * 2).toList();
+      matchCorrectCount.value = 0; // Reset benar
+      matchWrongCount.value = 0; // Reset salah
     }
 
     final start = currentMatchIndex.value * 2;

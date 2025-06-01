@@ -4,7 +4,6 @@ import 'package:kosakata_benda/presentasion/widgets/background.dart';
 import 'package:kosakata_benda/presentasion/widgets/frame.dart';
 import 'package:kosakata_benda/presentasion/controllers/vocab_controller.dart';
 
-
 class TebakBenda extends StatelessWidget {
   const TebakBenda({super.key});
 
@@ -65,9 +64,20 @@ class TebakBenda extends StatelessWidget {
                             children: [
                               const TextSpan(text: 'Tunjukkan benda '),
                               TextSpan(
-                                text: '"${soal.judul}"',
+                                text:
+                                    '"${soal.judul}"\n', // pakai \n supaya baris baru
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              TextSpan(
+                                text:
+                                    'Soal ${vocabController.currentQuestionIndex.value + 1}/${vocabController.totalQuestions}',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ],
                           ),
@@ -84,8 +94,7 @@ class TebakBenda extends StatelessWidget {
                               print("Selected vocab: ${vocab.judul}");
                               if (current != null) {
                                 print("Current question: ${current.judul}");
-                                vocabController.submitAnswer(vocab,
-                                    current); // Pass selected vocab and current question
+                                vocabController.submitAnswer(vocab, current);
                               } else {
                                 print("Current question is null");
                               }
@@ -95,14 +104,14 @@ class TebakBenda extends StatelessWidget {
                               label: vocab.judul,
                               isCircle: true,
                             ),
-                          ) ;
+                          );
                         }).toList(),
                       ),
                     ],
-                  ), 
+                  ),
                 ),
               ),
-            ); 
+            );
           }),
           Positioned(
             left: 0,

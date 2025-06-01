@@ -74,7 +74,7 @@ class MainMenu extends StatelessWidget {
 
           //#Button Pasang Huruf
           Positioned(
-            left: 305,
+            left: 302,
             bottom: 10,
             child: Column(
               children: [
